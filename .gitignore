@@ -1,0 +1,68 @@
+# --------------------
+# Python bytecode
+# --------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --------------------
+# Virtual environments
+# --------------------
+venv/
+env/
+.venv/
+ENV/
+
+# --------------------
+# Distribution / packaging
+# --------------------
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# --------------------
+# Logs
+# --------------------
+*.log
+
+# --------------------
+# Environment variables
+# --------------------
+.env
+.env.local
+
+# --------------------
+# IDE / Editor files
+# --------------------
+.vscode/
+.idea/
+*.iml
+
+# --------------------
+# OS files
+# --------------------
+.DS_Store
+Thumbs.db
+
+# --------------------
+# Test / coverage
+# --------------------
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --------------------
+# Jupyter Notebook
+# --------------------
+.ipynb_checkpoints/
+
+# --------------------
+# SQLite / local DB
+# --------------------
+*.sqlite3
+
+# --------------------
+# MyPy / type checking
+# --------------------
+.mypy_cache/
