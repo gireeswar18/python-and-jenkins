@@ -1,0 +1,61 @@
+pipeline {
+    agent any
+    environment {
+        DOCKER_IMAGE= "simple-app"
+        CONTAINER_NAME= "my-container"
+        // ENVIRONMENT = "testing"
+        // PYTHON = "C:\\Python314\\python.exe"
+    }
+    parameters {
+        // string(name: "ENVIRONMENT", defaultValue: '', description: 'Environment Name')
+        choice(name: "ENVIRONMENT", choices: ['testing', 'prod'], description: 'Environment Name')
+    }
+    stages {
+        stage('Git Cloning') {
+            steps {
+                git credentialsId: 'GithubCred', url: 'https://github.com/gireeswar18/python-and-jenkins'
+            }
+        }
+        stage('Check if repo exists') {
+            steps {
+                bat 'dir'
+            }
+        }
+        stage('Testing') {
+            when {
+                expression {
+                    params.ENVIRONMENT == 'testing'
+                }
+            }
+             steps {
+                bat '''
+                python -m venv venv
+                call venv\\Scripts\\activate
+                python -m pip install --upgrade pip
+                python -m pip install -r requirements.txt
+                python -m pytest
+                '''
+            }
+        }
+        stage('docker build') {
+            steps {
+                bat 'docker build -t %DOCKER_IMAGE%:%BUILD_NUMBER% .'
+            }
+        }
+        stage('docker remove old container') {
+            steps {
+                bat 'docker rm -f %CONTAINER_NAME% || true'
+            }
+        }
+        stage('docker run') {
+            steps {
+                bat 'docker run -d --name %CONTAINER_NAME% -p 8000:8000 %DOCKER_IMAGE%:%BUILD_NUMBER%'
+            }
+        }
+        stage('check container status') {
+            steps {
+                bat 'docker ps'
+            }
+        }
+    }
+}
